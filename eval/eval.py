@@ -1,5 +1,5 @@
 # Code to recreate results of experiments
-# Uncomment lines 21, 91-93, 104 and 116 to include TTK-clustering algorithm
+# Set value of `include_ttk` in line 22 to `True` to include TTK-algorithm
 
 import json
 import os
@@ -17,9 +17,11 @@ from sklearn.preprocessing import minmax_scale
 
 from automato import Automato
 from eval.finch_subclassed.finch_subclassed import FINCHSubclassed
-
-# from eval.ttk_subclassed.ttk_subclassed import TTKSubclassed
 from persistence_plotting import cs_wong
+
+include_ttk = False  # Set to `True` to include TTK-algorithm
+if include_ttk:
+    from eval.ttk_subclassed.ttk_subclassed import TTKSubclassed
 
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 pd.options.plotting.backend = "plotly"
@@ -88,10 +90,10 @@ clusterers = (
     + [
         FINCHSubclassed()
     ]
-    # + [
-    #     TTKSubclassed(random_state=seed)
-    # ]
 )
+if include_ttk:
+    clusterers.append(TTKSubclassed(random_state=seed))
+
 clusterer_names = (
     [f"automato_random_state_{random_state}" for random_state in random_states]
     + [f"linkage_ward_eps_{np.around(epsilon, 2)}" for epsilon in epsilons]
@@ -101,8 +103,10 @@ clusterer_names = (
     + [f"dbscan_eps_{np.around(epsilon, 2)}" for epsilon in epsilons]
     + ["hdbscan"]
     + ["finch"]
-    # + ["ttk"]
 )
+if include_ttk:
+    clusterer_names.append("ttk")
+
 clusterer_shortnames = (
     [f"automato_random_state_{random_state}" for random_state in random_states]
     + [
@@ -113,9 +117,10 @@ clusterer_shortnames = (
         "dbscan",
         "hdbscan",
         "finch",
-        # "ttk"
     ]
 )
+if include_ttk:
+    clusterer_shortnames.append("ttk")
 
 # Metrics to compute
 metrics = [
