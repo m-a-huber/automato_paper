@@ -1,6 +1,5 @@
 import numpy as np
 import plotly.graph_objs as gobj  # type: ignore
-from gudhi import plot_persistence_barcode  # type: ignore
 from plotly.subplots import make_subplots  # type: ignore
 
 from persistence_plotting import cs_wong
@@ -556,79 +555,6 @@ def plot_persistences(
     if display_plot:
         fig.show()
     return fig
-
-
-def plot_barcodes(persistences, without_infty=False):
-    """Function plotting a collection of persistence barcodes.
-
-    Args:
-        persistences (list[list[numpy.ndarray]]):
-            The data of the persistence diagrams to be plotted. The format of
-            this data must be a list each of whose entries contains the data
-            of an individual persistence diagram. This data, in turn, must be
-            a list of NumPy-arrays of shape (n_generators, 2), where the i-th
-            entry of the list is an array containing the birth and death
-            times of the homological generators in dimension i-1. In
-            particular, the list must start with 0-dimensional homology and
-            contains information from consecutive homological dimensions.
-        without_infty (bool, optional): Whether or not to plot a horizontal
-            line corresponding to generators dying at infinity.
-            Defaults to False.
-
-    Returns:
-        tuple(matplotlib.axes._axes.Axes): Tuple containing the plotted
-            persistence barcodes.
-    """
-    # Validate `persistences` parameter
-    if not isinstance(persistences, list):
-        raise ValueError(
-            "The `persistences` parameter must be a list."
-        )
-    if not all(
-        isinstance(persistences, list)
-        for persistence in persistences
-    ):
-        raise ValueError(
-            "Each entry of the `persistences` parameter must be a list."
-        )
-    if not all(
-        isinstance(dim, np.ndarray)
-        for persistence in persistences
-        for dim in persistence
-    ):
-        raise ValueError(
-            "Each entry of each entry of the `persistences` "
-            "parameter must be a NumPy-array."
-        )
-    if not all(
-        dim.ndim == 2 and
-        dim.shape[1:] == (2,)
-        for persistence in persistences
-        for dim in persistence
-    ):
-        raise ValueError(
-            "Each entry of each entry of the `persistences` "
-            "parameter must be a NumPy-array of shape (n_generators, 2)."
-        )
-    # Validate `without_infty` parameter
-    if not isinstance(without_infty, bool):
-        raise ValueError(
-            "The `without_infty` parameter must be a Boolean."
-        )
-
-    data = tuple(
-        _make_plottable(
-            persistences[i],
-            for_gudhi=True,
-            without_infty=without_infty
-        )
-        for i in range(len(persistences))
-    )
-    figs = tuple(
-        plot_persistence_barcode(data[i])
-        for i in range(len(persistences))
-    )
-    return figs
 
 
 def _make_plottable(persistence, for_gudhi=False, without_infty=False):
