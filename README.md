@@ -1,9 +1,13 @@
 ## AuToMATo: An Out-Of-The-Box Persistence-Based Clustering Algorithm
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/804334181.svg)](https://doi.org/10.5281/zenodo.17279740)
+
 
 Code for the paper ["AuToMATo: An Out-Of-The-Box Persistence-Based Clustering Algorithm"](https://arxiv.org/abs/2408.06958).
 This repository contains source code for AuToMATo as well as the code used to produce the results and figures from the paper above.
+This code is archived on Zenodo [here](https://doi.org/10.5281/zenodo.17279740).
+
 The following instructions assume that the Python package and project manager [`uv`](https://docs.astral.sh/uv/) is installed; similar instructions apply for other such managers.
 
 ## Requirements
